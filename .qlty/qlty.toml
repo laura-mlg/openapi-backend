@@ -23,7 +23,6 @@ mode = "comment"
 name = "default"
 default = true
 
-# Language linters
 [[plugin]]
 name = "eslint"
 mode = "comment"
@@ -38,18 +37,15 @@ name = "tsc"
 mode = "comment"
 skip_upstream = true
 
-# Formatters
 [[plugin]]
 name = "prettier"
 mode = "comment"
 config_files = [".prettierrc"]
 
-# OpenAPI spec linter
 [[plugin]]
 name = "spectral"
 mode = "comment"
 
-# Security scanners (block mode)
 [[plugin]]
 name = "trufflehog"
 mode = "block"
@@ -58,7 +54,6 @@ mode = "block"
 name = "osv-scanner"
 mode = "block"
 
-# Cross-language tools
 [[plugin]]
 name = "markdownlint"
 mode = "comment"
@@ -67,7 +62,7 @@ mode = "comment"
 name = "actionlint"
 mode = "comment"
 
-# Per-plugin exclusion: exclude generated TypeScript type files from tsc and eslint.
+# Exclude generated TypeScript type files from tsc and eslint.
 [[exclude]]
 plugins = ["tsc", "eslint"]
 file_patterns = [
@@ -76,20 +71,13 @@ file_patterns = [
   "**/*.generated.d.ts",
 ]
 
-# Triage 1: Recategorize spectral's operation-security-defined rule as "security".
-[[triage]]
-plugins = ["spectral"]
-rules = ["operation-security-defined"]
-set.category = "security"
-
-# Triage 2: Elevate eslint no-eval to block mode and security category.
+# Elevate no-eval to block mode (security-sensitive rule).
 [[triage]]
 plugins = ["eslint"]
 rules = ["no-eval"]
 set.mode = "block"
-set.category = "security"
 
-# Triage 3: Ignore @typescript-eslint/no-explicit-any in test files.
+# Ignore @typescript-eslint/no-explicit-any in test files.
 [[triage]]
 plugins = ["eslint"]
 rules = ["@typescript-eslint/no-explicit-any"]
