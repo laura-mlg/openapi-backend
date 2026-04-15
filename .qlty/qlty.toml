@@ -18,7 +18,6 @@ test_patterns = [
 [smells]
 mode = "comment"
 
-# Required — points to the built-in Qlty plugin registry.
 [[source]]
 name = "default"
 default = true
@@ -40,7 +39,6 @@ skip_upstream = true
 [[plugin]]
 name = "prettier"
 mode = "comment"
-config_files = [".prettierrc"]
 
 [[plugin]]
 name = "spectral"
@@ -62,23 +60,11 @@ mode = "comment"
 name = "actionlint"
 mode = "comment"
 
-# Exclude generated TypeScript type files from tsc and eslint.
 [[exclude]]
 plugins = ["tsc", "eslint"]
-file_patterns = [
-  "**/__generated__/**",
-  "**/*.generated.ts",
-]
+file_patterns = ["**/__generated__/**", "**/*.generated.ts"]
 
-# Elevate no-eval to block mode.
 [[triage]]
 plugins = ["eslint"]
 rules = ["no-eval"]
 set.mode = "block"
-
-# Downgrade @typescript-eslint/no-explicit-any to monitor in test files.
-[[triage]]
-plugins = ["eslint"]
-rules = ["@typescript-eslint/no-explicit-any"]
-file_patterns = ["**/*.test.*", "**/*.spec.*", "**/__tests__/**"]
-set.mode = "monitor"
