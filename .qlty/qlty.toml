@@ -1,0 +1,104 @@
+# This configuration was generated with the setup-qlty-toml skill (v2).
+# For reference: https://docs.qlty.sh/qlty-toml
+config_version = "0"
+
+exclude_patterns = [
+  "**/node_modules/**",
+  "**/dist/**",
+  "**/*.d.ts",
+  "**/examples/**",
+]
+
+test_patterns = [
+  "**/__tests__/**",
+  "**/*.test.*",
+  "**/*.spec.*",
+]
+
+[smells]
+mode = "comment"
+
+# Required — points to the built-in Qlty plugin registry.
+[[source]]
+name = "default"
+default = true
+
+# Language linters
+[[plugin]]
+name = "eslint"
+mode = "comment"
+config_files = [".eslintrc.js"]
+extra_packages = [
+  "@typescript-eslint/parser@6.7.4",
+  "@typescript-eslint/eslint-plugin@6.7.4",
+]
+
+[[plugin]]
+name = "tsc"
+mode = "comment"
+skip_upstream = true
+
+# Formatters
+[[plugin]]
+name = "prettier"
+mode = "comment"
+config_files = [".prettierrc"]
+
+# OpenAPI spec linter
+[[plugin]]
+name = "spectral"
+mode = "comment"
+
+# Security scanners (block mode)
+[[plugin]]
+name = "trufflehog"
+mode = "block"
+
+[[plugin]]
+name = "osv-scanner"
+mode = "block"
+
+# Cross-language tools
+[[plugin]]
+name = "markdownlint"
+mode = "comment"
+
+[[plugin]]
+name = "actionlint"
+mode = "comment"
+
+# Per-plugin exclusion: exclude generated TypeScript type files from tsc and eslint.
+# TypeScript projects often produce *.generated.ts files (e.g. from openapi-typescript,
+# graphql-codegen, or similar code generators). These should not be linted.
+[[exclude]]
+plugins = ["tsc", "eslint"]
+file_patterns = [
+  "**/__generated__/**",
+  "**/*.generated.ts",
+  "**/*.generated.d.ts",
+]
+
+# Triage 1: Recategorize spectral's operation-security-defined rule as "security".
+# The OAS rule that flags operations missing a security scheme belongs in the security
+# category, not the default style category that spectral uses.
+[[triage]]
+plugins = ["spectral"]
+rules = ["operation-security-defined"]
+set.category = "security"
+
+# Triage 2: Triage spectral's no-eval and related security-sensitive rules to block mode.
+# Any OpenAPI spec issue that indicates eval-equivalent risk should hard-fail.
+[[triage]]
+plugins = ["eslint"]
+rules = ["no-eval"]
+set.category = "security"
+set.mode = "block"
+
+# Triage 3: Ignore @typescript-eslint/no-explicit-any in test and spec files.
+# Test code frequently uses `any` for mock objects and fixtures — this is accepted practice
+# and these violations are noisy without being actionable in a test context.
+[[triage]]
+plugins = ["eslint"]
+rules = ["@typescript-eslint/no-explicit-any"]
+file_patterns = ["**/*.test.*", "**/*.spec.*", "**/__tests__/**"]
+set.ignored = true
