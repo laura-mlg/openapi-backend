@@ -1,0 +1,72 @@
+config_version = "0"
+
+exclude_patterns = [
+  "**/node_modules/**",
+  "**/dist/**",
+  "**/*.d.ts",
+  "**/examples/**",
+]
+
+test_patterns = [
+  "**/__tests__/**",
+  "**/*.test.*",
+  "**/*.spec.*",
+]
+
+[smells]
+mode = "comment"
+
+[[source]]
+name = "default"
+default = true
+
+[[plugin]]
+name = "eslint"
+mode = "comment"
+config_files = [".eslintrc.js"]
+extra_packages = [
+  "@typescript-eslint/parser@5.62.0",
+  "@typescript-eslint/eslint-plugin@5.62.0",
+]
+
+[[plugin]]
+name = "prettier"
+mode = "comment"
+
+[[plugin]]
+name = "spectral"
+mode = "comment"
+
+[[plugin]]
+name = "trufflehog"
+mode = "block"
+
+[[plugin]]
+name = "osv-scanner"
+mode = "block"
+
+[[plugin]]
+name = "markdownlint"
+mode = "comment"
+
+[[plugin]]
+name = "actionlint"
+mode = "comment"
+
+[[exclude]]
+plugins = ["eslint"]
+file_patterns = [
+  "**/__generated__/**",
+  "**/*.generated.ts",
+]
+
+[[triage]]
+plugins = ["eslint"]
+rules = ["no-eval"]
+set.mode = "block"
+
+[[triage]]
+plugins = ["eslint"]
+rules = ["@typescript-eslint/no-explicit-any"]
+file_patterns = ["**/*.test.*", "**/*.spec.*", "**/__tests__/**"]
+set.mode = "monitor"
