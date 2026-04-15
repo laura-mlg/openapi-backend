@@ -68,18 +68,17 @@ plugins = ["tsc", "eslint"]
 file_patterns = [
   "**/__generated__/**",
   "**/*.generated.ts",
-  "**/*.generated.d.ts",
 ]
 
-# Elevate no-eval to block mode (security-sensitive rule).
+# Elevate no-eval to block mode.
 [[triage]]
 plugins = ["eslint"]
 rules = ["no-eval"]
 set.mode = "block"
 
-# Ignore @typescript-eslint/no-explicit-any in test files.
+# Downgrade @typescript-eslint/no-explicit-any to monitor in test files.
 [[triage]]
 plugins = ["eslint"]
 rules = ["@typescript-eslint/no-explicit-any"]
 file_patterns = ["**/*.test.*", "**/*.spec.*", "**/__tests__/**"]
-set.ignored = true
+set.mode = "monitor"
