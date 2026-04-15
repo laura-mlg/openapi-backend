@@ -1,5 +1,3 @@
-# This configuration was generated with the setup-qlty-toml skill (v2).
-# For reference: https://docs.qlty.sh/qlty-toml
 config_version = "0"
 
 exclude_patterns = [
@@ -32,11 +30,6 @@ extra_packages = [
 ]
 
 [[plugin]]
-name = "tsc"
-mode = "comment"
-skip_upstream = true
-
-[[plugin]]
 name = "prettier"
 mode = "comment"
 
@@ -61,10 +54,19 @@ name = "actionlint"
 mode = "comment"
 
 [[exclude]]
-plugins = ["tsc", "eslint"]
-file_patterns = ["**/__generated__/**", "**/*.generated.ts"]
+plugins = ["eslint"]
+file_patterns = [
+  "**/__generated__/**",
+  "**/*.generated.ts",
+]
 
 [[triage]]
 plugins = ["eslint"]
 rules = ["no-eval"]
 set.mode = "block"
+
+[[triage]]
+plugins = ["eslint"]
+rules = ["@typescript-eslint/no-explicit-any"]
+file_patterns = ["**/*.test.*", "**/*.spec.*", "**/__tests__/**"]
+set.mode = "monitor"
