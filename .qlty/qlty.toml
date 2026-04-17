@@ -30,10 +30,6 @@ extra_packages = [
 ]
 
 [[plugin]]
-name = "tsc"
-mode = "comment"
-
-[[plugin]]
 name = "prettier"
 mode = "comment"
 config_files = [".prettierrc"]
